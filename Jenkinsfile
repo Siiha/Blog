@@ -18,5 +18,10 @@ pipeline {
                 sh 'docker run -d -p 3000:3000 --name blog blog'
             }
         }
+        stage('Trivy Security Scan') {
+            steps {
+                sh 'trivy fs .'
+                }}
+
     }
 }
