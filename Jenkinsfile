@@ -27,5 +27,11 @@ pipeline {
                 sh 'docker run --rm --network host hackllc/nikto:2.6.1 -h http://localhost:3000'
             }
         }
+        stage('OWASP Dependency Check') {
+            teps {
+                dependencyCheck additionalArguments: '--scan .', odcInstallation: 'Dependency-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                }
+        }
     }
 }
