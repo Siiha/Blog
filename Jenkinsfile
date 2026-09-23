@@ -11,6 +11,17 @@ pipeline {
                 sh 'docker build --pull --rm -f "Dockerfile" -t blog:latest "."'
             }
         }
+        stage('Trivy Security Scan') {
+            steps {
+                sh 'trivy fs .'
+                }}
+        stage('OWASP Dependency Check') {
+            steps {
+                dependencyCheck additionalArguments: '--scan .', odcInstallation: 'Dependency-check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                }
+        }
+        sta
         stage('Run') {
             steps {
                 sh 'docker stop blog || true'
@@ -18,20 +29,10 @@ pipeline {
                 sh 'docker run -d -p 3000:3000 --name blog blog'
             }
         }
-        stage('Trivy Security Scan') {
-            steps {
-                sh 'trivy fs .'
-                }}
-        stage('Nikto Security Scan'){
+        ge('Nikto Security Scan'){
             steps {
                 sh 'docker run --rm --network host hackllc/nikto:2.6.1 -h http://localhost:3000'
             }
-        }
-        stage('OWASP Dependency Check') {
-            steps {
-                dependencyCheck additionalArguments: '--scan .', odcInstallation: 'Dependency-check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                }
         }
     }
 }
