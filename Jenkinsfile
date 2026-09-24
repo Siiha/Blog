@@ -21,6 +21,11 @@ pipeline {
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                 }
         }
+        stage('Nikto Security Scan'){
+            steps {
+                sh 'docker run --rm --network host hackllc/nikto:2.6.1 -h http://localhost:3000'
+            }
+        }
         stage('Run') {
             steps {
                 sh 'docker stop blog || true'
@@ -28,10 +33,6 @@ pipeline {
                 sh 'docker run -d -p 3000:3000 --name blog blog'
             }
         }
-        stage('Nikto Security Scan'){
-            steps {
-                sh 'docker run --rm --network host hackllc/nikto:2.6.1 -h http://localhost:3000'
-            }
-        }
+        
     }
 }
