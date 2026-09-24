@@ -14,17 +14,13 @@ pipeline {
         stage('Trivy Security Scan') {
             steps {
                 sh 'trivy fs .'
-                }}
+                }
+        }
         stage('OWASP Dependency Check') {
             steps {
                 dependencyCheck additionalArguments: '--scan .', odcInstallation: 'Dependency-check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                 }
-        }
-        stage('Nikto Security Scan'){
-            steps {
-                sh 'docker run --rm --network host hackllc/nikto:2.6.1 -h http://localhost:3000'
-            }
         }
         stage('Run') {
             steps {
@@ -33,6 +29,10 @@ pipeline {
                 sh 'docker run -d -p 3000:3000 --name blog blog'
             }
         }
-        
+        stage('Nikto Security Scan'){
+            steps {
+                sh 'docker run --rm --network host hackllc/nikto:2.6.1 -h http://localhost:3000'
+            }
+        }
     }
 }
