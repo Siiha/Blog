@@ -32,7 +32,8 @@ router.get('/register', (req, res) => {
 
 router.post('/register', (req, res) => {
     const { username, password } = req.body;
-    const hashedPassword = bcrypt.hashSync("salasana", 10);
+    const defaultPassword = "salasana"; // Default password for new users
+    const hashedPassword = bcrypt.hashSync(defaultPassword, 10);
     db.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
         if (err) throw err;
         if (!user) {
