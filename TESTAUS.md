@@ -53,3 +53,5 @@ istuntoeväste on `HttpOnly` ja satunnaisesti muodostettu, hallintasivu on
 rajattu ylläpitäjälle, kirjautumaton käyttäjä ei voi luoda postausta,
 kirjautumissyöte välitetään parametrina SQL-kyselyyn, postauksen sisältö
 escapetaan HTML:ssä ja uloskirjautuminen tyhjentää istuntoevästeen.
+
+*dokumentti on tehtyt tekoälyn avulla*
