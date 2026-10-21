@@ -13,7 +13,7 @@ router.post('/login', (req, res) => {
     db.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
         if (err) throw err;
         if (user && bcrypt.compareSync(password, user.password)) {
-            const sessionId = crypto.createHash('sha256').update(user.username).digest('hex');
+            const sessionId = crypto.randomBytes(32).toString('hex');
             db.run("UPDATE users SET sessionId = ? WHERE username = ?", [sessionId, user.username], (err) => {
                 if (err) throw err;
                 res.cookie('sessionId', sessionId, { httpOnly: true });
@@ -36,7 +36,7 @@ router.post('/register', (req, res) => {
     db.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
         if (err) throw err;
         if (!user) {
-            db.run("INSERT INTO users (username, password, sessionId) VALUES (?, ?, ?)", [username, password, 0], (err) => {
+            db.run("INSERT INTO users (username, password, sessionId) VALUES (?, ?, ?)", [username, hashedPassword, 0], (err) => {
                 if (err) throw err;
             });
         }

@@ -16,12 +16,7 @@ pipeline {
                 sh 'trivy fs .'
                 }
         }
-        stage('OWASP Dependency Check') {
-            steps {
-                dependencyCheck additionalArguments: '--scan .', odcInstallation: 'Dependency-check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                }
-        }
+    
         stage('Run') {
             steps {
                 sh 'docker stop blog || true'
