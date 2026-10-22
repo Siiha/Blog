@@ -26,7 +26,7 @@ pipeline {
         }
         stage('Nikto Security Scan'){
             steps {
-                sh 'docker run --rm hackllc/nikto:2.6.1 -h host.docker.internal -p 3000'
+                sh 'docker run --rm --network host hackllc/nikto:2.6.1 -h http://localhost:3000'
             }
         }
     }
